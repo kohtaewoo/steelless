@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const dotenv = require("dotenv");
+console.log("KAKAO_API_KEY:", process.env.KAKAO_API_KEY);
 
 // CORS 헤더 설정
 app.use((req, res, next) => {
