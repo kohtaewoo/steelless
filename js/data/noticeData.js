@@ -10,5 +10,4 @@ const noticeData = [
     },
   ];
 
-  module.exports = noticeData;
   
