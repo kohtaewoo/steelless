@@ -17,8 +17,6 @@ app.use((req, res, next) => {
   next();
 });
 
-
-
 // 정적 파일 경로 설정
 app.use(express.static(path.join(__dirname, "..")));
 
@@ -85,3 +83,4 @@ app.get("/loadKakaoScript", (req, res) => {
     `document.write('<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.KAKAO_API_KEY}&libraries=services,clusterer"><\\/script>');`,
   );
 });
+
