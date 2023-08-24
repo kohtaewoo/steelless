@@ -4,12 +4,6 @@ const app = express();
 const path = require("path");
 const dotenv = require("dotenv");
 
-// .env 파일 경로 설정
-if (process.env.KAKAO_API_KEY !== "production") {
-  dotenv.config({ path: path.join(__dirname, "..", "kakao.env") });
-}
-
-
 // CORS 헤더 설정
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
