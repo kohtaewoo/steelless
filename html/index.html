@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko" style="height: 100%;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 페이지</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 폰트 설정 및 페이지 높이 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            height: 100%;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+        /* 네비게이션 바 배경색 및 글자 스타일 적용 */
+        .navbar {
+            background-color: #3f51b5;
+            font-size: 18px;
+            font-weight: bold;
+            color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .navbar-brand,
+        .nav-link {
+            color: white;
+            transition: color 0.2s;
+        }
+        .nav-link:hover {
+            color: #B2EBF2;
+        }
+        /* 아이프레임에 부드러운 그림자 효과 적용 및 높이 설정 */
+        iframe {
+            transition: box-shadow 0.3s;
+            height: calc(100% - 60px);
+        }
+        iframe:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <!-- 필요한 서드파티 라이브러리들을 포함 -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <!-- 네비게이션 바 설정 -->
+        <nav class="navbar navbar-expand-lg navbar-dark">
+            <!-- 로고 설정 -->
+            <a class="navbar-brand" href="#">순살 아파트</a>
+            <!-- 토글 버튼 설정 -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <!-- 네비게이션 링크 설정 -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="map.html" target="content_frame">지도</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="news.html" target="content_frame">관련 기사</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="notice.html" target="content_frame">공지사항</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+    <!-- 첫 화면을 지도 페이지(map.html)로 설정 -->
+    <iframe name="content_frame" src="map.html" style="width: 100%; border: none;"></iframe>
+</body>
+
+</html>

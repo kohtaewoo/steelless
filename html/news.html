@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관련 기사 날짜별 정리</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    <style>
+        /* 기본 스타일 설정 */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        header {
+            background-color: #3f51b5;
+            padding: 20px;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            margin: 30px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        /* 제목 및 제목 아래 선 스타일 */
+        h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #4caf50;
+            font-weight: bold;
+            border-bottom: 2px solid #4caf50;
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+        .date-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        /* 버튼 스타일 */
+        button {
+            background-color: #4caf50;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 2px;
+        }
+        .news-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 10px;
+            justify-items: center;
+        }
+        /* 기사 링크 스타일 */
+        .news-link {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            overflow-wrap: break-word;
+            white-space: normal;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        관련 기사 날짜별 정리
+    </header>
+    <!-- 컨테이너 및 날짜별 기사 섹션 -->
+    <div class="container">
+        <h2>날짜별 기사</h2>
+        <div class="date-buttons">
+            <!-- 여기에 날짜별 버튼을 추가하세요 -->
+            <button onclick="showNewsLinksByDate('2023-07-30')">2023-07-30</button>
+            <button onclick="showNewsLinksByDate('2023-07-31')">2023-07-31</button>
+            <button onclick="showNewsLinksByDate('2023-08-01')">2023-08-01</button>
+            <button onclick="showNewsLinksByDate('2023-08-02')">2023-08-02</button>
+            <button onclick="showNewsLinksByDate('2023-08-03')">2023-08-03</button>
+            <button onclick="showNewsLinksByDate('2023-08-04')">2023-08-04</button>
+            <button onclick="showNewsLinksByDate('2023-08-05')">2023-08-05</button>
+            <button onclick="showNewsLinksByDate('2023-08-06')">2023-08-06</button>
+            <button onclick="showNewsLinksByDate('2023-08-07')">2023-08-07</button>
+            <button onclick="showNewsLinksByDate('2023-08-08')">2023-08-08</button>
+            <button onclick="showNewsLinksByDate('2023-08-09')">2023-08-09</button>
+            <button onclick="showNewsLinksByDate('2023-08-10')">2023-08-10</button>
+            <button onclick="showNewsLinksByDate('2023-08-11')">2023-08-11</button>
+            <button onclick="showNewsLinksByDate('2023-08-12')">2023-08-12</button>
+            <button onclick="showNewsLinksByDate('2023-08-13')">2023-08-13</button>
+            <button onclick="showNewsLinksByDate('2023-08-14')">2023-08-14</button>
+            <button onclick="showNewsLinksByDate('2023-08-15')">2023-08-15</button>
+            <button onclick="showNewsLinksByDate('2023-08-16')">2023-08-16</button>
+            <button onclick="showNewsLinksByDate('2023-08-17')">2023-08-17</button>
+            <!-- ... -->
+        </div>
+        <div id="news-links">
+            <!-- 날짜별 기사 링크 추가 영역 -->
+        </div>
+    </div>
+    <script src="/newsData.js"></script>
+    <script>
+        const newsLinksContainer = document.getElementById('news-links');
+
+        function showNewsLinksByDate(date) {
+            newsLinksContainer.innerHTML = '';  // 기존 내용 초기화
+            const newsLinks = getNewsLinksByDate(date); // 날짜별 기사 링크를 가져옵니다.
+
+            // 링크를 화면에 표시합니다.
+            newsLinks.forEach(news => {
+                const anchor = document.createElement('a');
+                anchor.href = news.link;
+                anchor.target = '_blank';  // 링크를 새 창에서 열게 합니다.
+                anchor.textContent = news.title;
+                anchor.className = 'news-link';
+                newsLinksContainer.appendChild(anchor);
+            });
+        }
+    </script>
+</body>
+</html>
