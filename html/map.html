@@ -40,8 +40,9 @@
       .info_text p span {
         font-weight: bold;
       }
-      .info_text p.title span, .info_text p.rebar_count span {
-        color: #FF0000;
+      .info_text p.title span,
+      .info_text p.rebar_count span {
+        color: #ff0000;
       }
       .info_text strong {
         color: #333;
@@ -80,18 +81,28 @@
         var marker = new kakao.maps.Marker({
           position: position,
         });
-      
+
         var infowindow = new kakao.maps.InfoWindow();
-      
+
         markers.push(marker);
-      
-        // 마커에 마우스 오버 이벤트 및 터치 이벤트 설정
-        kakao.maps.event.addListener(marker, "mouseover", handleMarkerEvent);
-        kakao.maps.event.addListener(marker, "touchstart", handleMarkerEvent);
-      
-        // 마커에 마우스 아웃 이벤트 및 터치 끝 이벤트 설정
-        kakao.maps.event.addListener(marker, "mouseout", handleMarkerEventEnd);
-        kakao.maps.event.addListener(marker, "touchend", handleMarkerEventEnd);
+
+        // 마커에 이벤트 설정
+        if (
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+        ) {
+          // 모바일 환경 - 클릭 이벤트 설정
+          kakao.maps.event.addListener(marker, "click", handleMarkerEvent);
+        } else {
+          // 데스크톱 환경 - 마우스 오버/아웃 이벤트 설정
+          kakao.maps.event.addListener(marker, "mouseover", handleMarkerEvent);
+          kakao.maps.event.addListener(
+            marker,
+            "mouseout",
+            handleMarkerEventEnd
+          );
+        }
 
         function handleMarkerEvent() {
           infowindow.setContent(createInfowindowContent(data));
@@ -108,13 +119,17 @@
 
       // 정보창 내용 생성 함수
       function createInfowindowContent(data) {
-        var missingRebarPercentage = data.missingRebars != null
-          ? (data.missingRebars / data.totalRebars) * 100
-          : null;
+        var missingRebarPercentage =
+          data.missingRebars != null
+            ? (data.missingRebars / data.totalRebars) * 100
+            : null;
 
-        var missingRebarText = missingRebarPercentage !== null
-          ? `${data.missingRebars} / ${data.totalRebars} (${missingRebarPercentage.toFixed(2)}%)`
-          : `조사 중 / ${data.totalRebars}`;
+        var missingRebarText =
+          missingRebarPercentage !== null
+            ? `${data.missingRebars} / ${
+                data.totalRebars
+              } (${missingRebarPercentage.toFixed(2)}%)`
+            : `조사 중 / ${data.totalRebars}`;
 
         // 정보창 템플릿 작성
         return `
@@ -135,3 +150,4 @@
     </script>
   </body>
 </html>
+
