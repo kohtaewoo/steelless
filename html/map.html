@@ -85,18 +85,23 @@
       
         markers.push(marker);
       
-        // 마커에 마우스 오버 이벤트 설정
-        kakao.maps.event.addListener(marker, "mouseover", function () {
+        // 마커에 마우스 오버 이벤트 및 터치 이벤트 설정
+        kakao.maps.event.addListener(marker, "mouseover", handleMarkerEvent);
+        kakao.maps.event.addListener(marker, "touchstart", handleMarkerEvent);
+      
+        // 마커에 마우스 아웃 이벤트 및 터치 끝 이벤트 설정
+        kakao.maps.event.addListener(marker, "mouseout", handleMarkerEventEnd);
+        kakao.maps.event.addListener(marker, "touchend", handleMarkerEventEnd);
+
+        function handleMarkerEvent() {
           infowindow.setContent(createInfowindowContent(data));
           infowindow.open(map, marker);
-        });
-      
-        // 마커에 마우스 아웃 이벤트 설정
-        kakao.maps.event.addListener(marker, "mouseout", function () {
+        }
+
+        function handleMarkerEventEnd() {
           infowindow.close();
-        });
+        }
       });
-      
 
       // 클러스터러에 마커 추가
       clusterer.addMarkers(markers);
