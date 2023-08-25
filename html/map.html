@@ -1,87 +1,163 @@
-const axios = require("axios");
-const express = require("express");
-const app = express();
-const path = require("path");
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>지도 페이지</title>
+    <style>
+      /* 기본 스타일 설정 */
+      body {
+        background-color: #f0f0f0;
+      }
+      #map {
+        width: 95%;
+        height: 95vh;
+        margin: 20px auto;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+      }
+      .infowindow_content {
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #ffffff;
+        padding: 15px;
+        max-width: 250px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+      .info_text {
+        margin-left: 10px;
+      }
+      .info_text p {
+        margin: 4px 0;
+        line-height: 1.5;
+        color: #333;
+      }
+      .info_text p span {
+        font-weight: bold;
+      }
+      .info_text p.title span,
+      .info_text p.rebar_count span {
+        color: #ff0000;
+      }
+      .info_text strong {
+        color: #333;
+        font-weight: 600;
+      }
+    </style>
+    <script src="/loadKakaoScript"></script>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="/buildingData.js"></script>
+    <script>
+      // 건물 데이터
+      var 데이터 = buildingData;
+      var mapContainer = document.getElementById("map");
+      // 지도 옵션 설정
+      var mapOption = {
+        center: new kakao.maps.LatLng(36.1404963, 128.315128),
+        level: 13,
+        mapTypeId: kakao.maps.MapTypeId.ROADMAP,
+      };
+      // 지도 생성
+      var map = new kakao.maps.Map(mapContainer, mapOption);
+      // 마커 클러스터러 설정
+      var clusterer = new kakao.maps.MarkerClusterer({
+        map: map,
+        averageCenter: true,
+        minLevel: 10,
+      });
+      // 마커 배열 선언
+      var markers = [];
 
-// CORS 헤더 설정
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PATCH, DELETE, OPTIONS"
-  );
-  next();
-});
+      // 건물 데이터에 대해 마커 및 정보창 생성
+      데이터.forEach(function (data) {
+        var position = new kakao.maps.LatLng(data.lat, data.lng);
+        var marker = new kakao.maps.Marker({
+          position: position,
+        });
 
-// 정적 파일 경로 설정
-app.use(express.static(path.join(__dirname, "..")));
+        var infowindow = new kakao.maps.InfoWindow();
 
-// 라우팅 설정
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "index.html"));
-});
+        markers.push(marker);
 
-app.get("/map.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "map.html"));
-});
+        // 마커에 이벤트 설정
+        if (
+          /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+            navigator.userAgent
+          )
+        ) {
+          // 모바일 환경 - 클릭 이벤트 설정
+          kakao.maps.event.addListener(marker, "click", function () {
+            closeAllInfoWindows(); // 다른 인포윈도우를 닫음
+            infowindow.setContent(createInfowindowContent(data));
+            infowindow.open(map, marker);
+          });
+        } else {
+          // 데스크톱 환경 - 마우스 오버/아웃 이벤트 설정
+          kakao.maps.event.addListener(marker, "mouseover", function () {
+            closeAllInfoWindows(); // 다른 인포윈도우를 닫음
+            infowindow.setContent(createInfowindowContent(data));
+            infowindow.open(map, marker);
+          });
+          kakao.maps.event.addListener(marker, "mouseout", function () {
+            infowindow.close();
+          });
+        }
 
-app.get("/buildingData.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "js", "data", "buildingData.js"));
-});
+        function closeAllInfoWindows() {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].infowindow && markers[i].infowindow.close();
+          }
+        }
 
-app.get("/news.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "news.html"));
-});
+        marker.infowindow = infowindow;
+      });
 
-app.get("/newsData.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "js", "data", "newsData.js"));
-});
+      // 다른 곳을 클릭하면 정보창 닫기
+      kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+        closeAllInfoWindows();
+      });
 
-app.get("/notice.html", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "html", "notice.html"));
-});
+      // 클러스터러에 마커 추가
+      clusterer.addMarkers(markers);
 
-app.get("/noticeData.js", (req, res) => {
-  res.sendFile(path.join(__dirname, "..", "js", "data", "noticeData.js"));
-});
+      // 정보창 내용 생성 함수
+      function createInfowindowContent(data) {
+        var missingRebarPercentage =
+          data.missingRebars != null
+            ? (data.missingRebars / data.totalRebars) * 100
+            : null;
 
-// 서버 포트 설정
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+        var missingRebarText =
+          missingRebarPercentage !== null
+            ? `${data.missingRebars} / ${
+                data.totalRebars
+              } (${missingRebarPercentage.toFixed(2)}%)`
+            : `조사 중 / ${data.totalRebars}`;
 
-// 카카오 맵 정보 가져오기
-app.get("/getKakaoMapData", async (req, res) => {
-  const { lat, lng } = req.query;
-
-  try {
-    const response = await axios.get(
-      `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${lng}&y=${lat}`,
-      {
-        headers: {
-          Authorization: `KakaoAK ${process.env.KAKAO_API_KEY}`,
-        },
-      },
-    );
-
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "서버 오류 발생" });
-  }
-});
-
-// 카카오 지도 스크립트 불러오기
-app.get("/loadKakaoScript", (req, res) => {
-  res.set("Content-Type", "text/javascript");
-  res.send(
-    `document.write('<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=2ef5df13c777bf4d83723ed0a6851c90&libraries=services,clusterer"><\\/script>');`,
-  );
-});
-
+        // 정보창 템플릿 작성
+        return `
+          <div class="infowindow_content">
+            <div class="info_text">
+              <p class="title"><strong>지구명:</strong> <span>${data.apartment}</span></p>
+              <p class="rebar_count"><strong>누락된 철근 개수:</strong> <span>${missingRebarText}</span></p>
+              <p><strong>원인:</strong> ${data.cause}</p>
+              <p><strong>보강방법:</strong> ${data.reinforcement}</p>
+              <p><strong>설계 기업:</strong> ${data.architect}</p>
+              <p><strong>시공사:</strong> ${data.constructor}</p>
+              <p><strong>감리:</strong> ${data.supervisor}</p>
+              <p><strong>입주여부:</strong> ${data.etc}</p>
+            </div>
+          </div>
+        `;
+      }
+    </script>
+  </body>
+</html>
 
