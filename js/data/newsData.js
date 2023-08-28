@@ -116,7 +116,7 @@ const newsData = {
 '2023-08-20': [
 { title: 'LH, 철근 누락 발표 이후 전관업체 계약 모조리 \'취소\'', link: 'https://news.jtbc.co.kr/article/article.aspx?news_id=NB12140521' },
 { title: '\"순살 아파트 뒤에 전관 특혜\" 비판에 수습 나선 LH', link: 'https://imnews.imbc.com/replay/2023/nwdesk/article/6516192_36199.html' },
-{ title: '\'철근 누락\' 후에도 650억 계약…\"전관 계약 모두 해지\", link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1007314435' },
+{ title: ''\'철근 누락\' 후에도 650억 계약…\"전관 계약 모두 해지\"', link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1007314435' },
 { title: 'LH, 전관 계약 648억 해지…\“공급 차질 불가피\” 우려도', link: 'https://news.kbs.co.kr/news/view.do?ncd=7752569' },    
 ],
 
@@ -126,7 +126,7 @@ const newsData = {
 
 '2023-08-23': [
 { title: '새 아파트에 누수·곰팡이가?…알고 보니 또 \'LH 전관업체\'', link: 'https://news.jtbc.co.kr/article/article.aspx?news_id=NB12141046' },
-{ title: 'LH, '무자격 도면 업체' 사기 혐의로 수사 의뢰', link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1007319130' },    
+{ title: 'LH, \'무자격 도면 업체\' 사기 혐의로 수사 의뢰', link: 'https://news.sbs.co.kr/news/endPage.do?news_id=N1007319130' },    
 ],
     // ...
 };
